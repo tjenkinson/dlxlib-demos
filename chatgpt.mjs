@@ -53,7 +53,9 @@ ${questions
     const candidates = questionCandidates[i];
 
     if (type !== _type) return null;
-    return `  [${number}, ${JSON.stringify(candidates)}], // ${clue}`;
+    return `  [${number}, ${JSON.stringify(
+      candidates.map((a) => a.toLowerCase())
+    )}], // ${clue}`;
   })
   .filter(Boolean)
   .join(`\n`)}
