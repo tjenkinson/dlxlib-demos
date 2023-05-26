@@ -53,9 +53,7 @@ ${questions
     const candidates = questionCandidates[i];
 
     if (type !== _type) return null;
-    return `  [${number}, ${JSON.stringify(
-      candidates.map((a) => a.toLowerCase())
-    )}], // ${clue}`;
+    return `  [${number}, ${JSON.stringify(candidates)}], // ${clue}`;
   })
   .filter(Boolean)
   .join(`\n`)}
@@ -82,17 +80,22 @@ async function go() {
       const res = await api.sendMessage(
         [
           `I'm trying to solve a crossword puzzle.`,
-          `It's a ${length} letter word and the clue is "${clue}".`,
-          `Provide as many answers as you can (max 30) that would fit.`,
+          `It must be a ${length} letter word, meaning each word must have exactly ${length} characters, and the clue is "${clue}".`,
+          `Provide as many answers as you can (max 30) that meet the condition above.`,
           `This must be formatted as a JSON array of strings.`,
           ...outputJsonCommand,
-        ].join(` `),
+        ].join(`\n`),
         {
           systemMessage: outputJsonCommand.join(` `),
         }
       );
       console.log(`Got response: "${res.text}"`);
-      questionCandidates.push(JSON.parse(res.text));
+      const responseParsed = JSON.parse(res.text);
+      questionCandidates.push(
+        responseParsed
+          .map((a) => a.trim().toLowerCase())
+          .filter((a) => a.length === length && /^[a-z]+$/.test(a))
+      );
     });
   }
 
