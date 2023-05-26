@@ -82,7 +82,11 @@ async function go() {
           `I'm trying to solve a crossword puzzle.`,
           `It must be a ${length} letter word, meaning each word must have exactly ${length} characters, and the clue is "${clue}".`,
           `Provide as many answers as you can (max 30) that meet the condition above.`,
-          `This must be formatted as a JSON array of strings.`,
+          `This must be formatted as a JSON array of strings. E.g. \`${[
+            `word1`,
+            `word2`,
+            `word3`,
+          ]}]\``,
           ...outputJsonCommand,
         ].join(`\n`),
         {
